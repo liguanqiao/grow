@@ -1,0 +1,4 @@
+com.liguanqiao.grow.json.engine.jackson.JacksonEngine
+com.liguanqiao.grow.json.engine.gson.GsonEngine
+com.liguanqiao.grow.json.engine.fastjson1.Fastjson1Engine
+com.liguanqiao.grow.json.engine.hutool.HutoolEngine

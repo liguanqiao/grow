@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.liguanqiao.grow.lock.spring.boot.autoconfigure.GrowLockAutoConfiguration
+

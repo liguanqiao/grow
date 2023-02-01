@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <!--Spring服务名-->
+    <springProperty scope="context" name="SPRING_APP_NAME" source="spring.application.name"/>
+    <!-- 以下配置修改自springboot -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} [${HOSTNAME}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="FILE_LOG_PATTERN" value="${FILE_LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS} [${HOSTNAME}] ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+    <!--带颜色的控制台日志-->
+    <appender name="STDOUT_COLOR" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--不带颜色的控制台日志-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--异步打印不带颜色的控制台日志-->
+    <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <!--不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志-->
+        <discardingThreshold>0</discardingThreshold>
+        <!--设置队列入队时非阻塞，当队列满时会直接丢弃日志，但是对性能提升极大-->
+        <neverBlock>true</neverBlock>
+        <!--更改默认的队列的深度,该值会影响性能.默认值为256-->
+        <queueSize>2048</queueSize>
+        <!--添加附加的appender,最多只能添加一个-->
+        <appender-ref ref="STDOUT"/>
+    </appender>
+
+    <!--文件日志-->
+    <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--实时日志输出文件-->
+        <File>./logs/${SPRING_APP_NAME}.log</File>
+        <!--日志文件滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${LOG_HOME}/${SPRING_APP_NAME}.log.%d{yyyy-MM-dd}.%i.log.gz</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>7</MaxHistory>
+            <!--日志文件压缩-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--日志文件大小-->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件存储总大小-->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <!--日志文件打印格式-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--异步文件日志-->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!--不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志-->
+        <discardingThreshold>0</discardingThreshold>
+        <!--设置队列入队时非阻塞，当队列满时会直接丢弃日志，但是对性能提升极大-->
+        <neverBlock>true</neverBlock>
+        <!--更改默认的队列的深度,该值会影响性能.默认值为256-->
+        <queueSize>2048</queueSize>
+        <!--添加附加的appender,最多只能添加一个-->
+        <appender-ref ref="FILE"/>
+    </appender>
+</included>
+

@@ -1,0 +1,7 @@
+.idea/
+logs
+target/
+*.iml
+tmp/
+hacking.bin
+application-lgq.yml

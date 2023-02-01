@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: local
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
+  datasource:
+    hikari:
+      maximum-pool-size: 5
+      idle-timeout: 300000
+      max-lifetime: 600000
+      minimum-idle: 2
+
+logging:
+  config: classpath:log/logback-spring.xml
+
+tlog:
+  enable-invoke-time-print: true

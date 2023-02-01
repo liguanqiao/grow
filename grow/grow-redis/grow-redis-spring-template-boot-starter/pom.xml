@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>jar</packaging>
+
+    <parent>
+        <artifactId>grow-redis</artifactId>
+        <groupId>com.liguanqiao</groupId>
+        <version>0.0.1</version>
+    </parent>
+
+    <artifactId>grow-redis-spring-template-boot-starter</artifactId>
+    <name>${project.artifactId}</name>
+    <description>Grow 常用Redis Client RedisTemplate封装Spring Boot自动装配</description>
+
+    <dependencies>
+        <!--grow-->
+        <dependency>
+            <groupId>com.liguanqiao</groupId>
+            <artifactId>grow-redis-spring-template</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--spring-boot-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.liguanqiao.grow.log.spring.boot.autoconfigure.LogXxljobAutoConfiguration,\
+  com.liguanqiao.grow.log.spring.boot.autoconfigure.LogAutoConfiguration
+
+# Environment Post Processor
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  com.liguanqiao.grow.log.spring.boot.autoconfigure.TraceEnvironmentPostProcessor
