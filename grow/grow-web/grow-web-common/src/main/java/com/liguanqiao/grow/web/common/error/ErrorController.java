@@ -29,6 +29,8 @@ import javax.xml.bind.ValidationException;
 import java.util.Optional;
 
 /**
+ * 异常捕捉
+ *
  * @author liguanqiao
  * @since 2022/12/4
  **/
@@ -37,10 +39,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ErrorController {
 
-    //    @Value("${spring.application.name}")
     private final String appName;
-
-    //    @Autowired
     private final TracerContext tracerContext;
 
     public ErrorController(String appName) {
@@ -148,7 +147,6 @@ public class ErrorController {
         log.warn(ex.getMessage(), ex);
         return BizMessage.of(CommonErrorCode.WRONG_PARAMS, appName, getTraceId());
     }
-
 
     private String getTraceId() {
         return Optional.of(tracerContext)

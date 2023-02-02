@@ -2,7 +2,6 @@ package com.liguanqiao.grow.log.spring.boot.autoconfigure;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
@@ -15,7 +14,6 @@ import java.util.Map;
 /**
  * @author liguanqiao
  * @since 2023/1/30
- * @see {@link org.springframework.cloud.sleuth.autoconfig.TraceEnvironmentPostProcessor}
  **/
 @Order
 public class TraceEnvironmentPostProcessor implements EnvironmentPostProcessor {

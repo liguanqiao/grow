@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 /**
  * Redis 操作接口
+ *
  * @author liguanqiao
  **/
 public interface RedisOps {
@@ -157,6 +158,10 @@ public interface RedisOps {
      * 经纬度校验，由EPSG:900913 / EPSG:3785 / OSGEO:41001 规定如下：
      * 有效的经度从-180度到180度
      * 有效的纬度从-85.05112878度到85.05112878度 与正常地理上的-90度～90度有差别
+     *
+     * @param lon 经度
+     * @param lat 纬度
+     * @return 校验结果
      */
     default Boolean geoCheck(double lon, double lat) {
         double lonRange = 180.00;
@@ -249,7 +254,7 @@ public interface RedisOps {
      * @param limit     限制取多少条，0表示不限制
      * @param isSortAsc 是否由近到远，为false则是由远到近
      * @param meters    距离单位
-     * @return
+     * @return key:pointName,value:{@link RedisGeoResult}
      */
     Map<String, RedisGeoResult> geoRadius(String key, String pointName, double distance, long limit, boolean isSortAsc, RedisMetric meters);
 
@@ -263,7 +268,7 @@ public interface RedisOps {
      * @param limit     限制取多少条，0表示不限制
      * @param isSortAsc 是否由近到远，为false则是由远到近
      * @param meters    距离单位
-     * @return
+     * @return key:pointName,value:{@link RedisGeoResult}
      */
     Map<String, RedisGeoResult> geoRadius(String key, double lon, double lat, double distance, long limit, boolean isSortAsc, RedisMetric meters);
 

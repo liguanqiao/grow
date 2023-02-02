@@ -17,8 +17,10 @@ public final class JsonUtil {
     /**
      * json to bean
      *
+     * @param <T>     bean type
      * @param json    json
      * @param typeOfT type reference
+     * @return bean
      **/
     public static <T> T toBean(String json, JsonTypeReference<T> typeOfT) {
         lazyLoading();
@@ -28,8 +30,10 @@ public final class JsonUtil {
     /**
      * json to bean
      *
+     * @param <T>  bean type
      * @param json json
      * @param type type
+     * @return bean
      **/
     public static <T> T toBean(String json, Type type) {
         lazyLoading();
@@ -39,8 +43,10 @@ public final class JsonUtil {
     /**
      * json to bean
      *
+     * @param <T>   bean type
      * @param json  json
      * @param clazz class
+     * @return bean
      **/
     public static <T> T toBean(String json, Class<T> clazz) {
         lazyLoading();
@@ -51,6 +57,7 @@ public final class JsonUtil {
      * bean to json
      *
      * @param object bean
+     * @return json string
      **/
     public static String toJson(Object object) {
         lazyLoading();

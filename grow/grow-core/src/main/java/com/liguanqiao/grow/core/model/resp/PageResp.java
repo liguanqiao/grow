@@ -41,6 +41,15 @@ public class PageResp<T> {
      **/
     private List<T> list;
 
+    /**
+     * 转换
+     *
+     * @param <T>     数据类型
+     * @param pageReq 分页请求
+     * @param total   总条数
+     * @param datas   数据
+     * @return 分页响应
+     **/
     public static <T> PageResp<T> convert(PageReq pageReq, long total, List<T> datas) {
         PageResp<T> result = new PageResp<>();
         result.setPageCur(pageReq.getPageCur());
@@ -57,26 +66,46 @@ public class PageResp<T> {
 
     /**
      * 分页
+     *
+     * @param <T>     数据类型
+     * @param pageReq 分页请求
+     * @param datas   数据
+     * @return 分页响应
      **/
     public static <T> PageResp<T> page(PageReq pageReq, List<T> datas) {
         //因为subd的end不包含，需+1;
         return convert(pageReq, datas.size(), ListUtil.sub(datas, pageReq.getStart(), pageReq.getEnd() + 1));
     }
 
+    /**
+     * 转换
+     *
+     * @param <R>    结果类型
+     * @param mapper 动作
+     * @return this
+     **/
     public <R> PageResp<R> map(Function<T, R> mapper) {
         return convert(getList().stream().map(mapper).collect(Collectors.toList()));
     }
 
-    public PageResp<T> peek(Consumer<T> action) {
-        getList().forEach(action);
-        return this;
-    }
-
+    /**
+     * 循环
+     *
+     * @param action 动作
+     * @return this
+     **/
     public PageResp<T> forEach(Consumer<T> action) {
         getList().forEach(action);
         return this;
     }
 
+    /**
+     * 转换
+     *
+     * @param <R>  结果类型
+     * @param list 数据
+     * @return 分页响应
+     **/
     public <R> PageResp<R> convert(List<R> list) {
         PageResp<R> result = new PageResp<>();
         result.setPageCur(getPageCur());
@@ -87,10 +116,25 @@ public class PageResp<T> {
         return result;
     }
 
+    /**
+     * 空
+     *
+     * @param <T>     数据类型
+     * @param pageReq 分页请求
+     * @return 分页响应
+     **/
     public static <T> PageResp<T> empty(PageReq pageReq) {
         return empty(pageReq, 0L);
     }
 
+    /**
+     * 空
+     *
+     * @param <T>     数据类型
+     * @param pageReq 分页请求
+     * @param total   总条数
+     * @return 分页响应
+     **/
     public static <T> PageResp<T> empty(PageReq pageReq, long total) {
         return convert(pageReq, total, Collections.emptyList());
     }

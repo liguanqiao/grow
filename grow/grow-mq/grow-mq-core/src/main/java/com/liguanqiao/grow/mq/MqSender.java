@@ -10,6 +10,7 @@ public interface MqSender {
     /**
      * message send
      *
+     * @param <T>   data type
      * @param topic topic
      * @param key   key
      * @param data  data
@@ -19,6 +20,7 @@ public interface MqSender {
     /**
      * message send
      *
+     * @param <T>   data type
      * @param topic topic
      * @param data  data
      **/

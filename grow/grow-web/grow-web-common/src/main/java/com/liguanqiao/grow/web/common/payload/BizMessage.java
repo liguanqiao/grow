@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * 业务信息
+ *
  * @author liguanqiao
  * @since 2023/1/13
  **/
