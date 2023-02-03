@@ -1,5 +1,5 @@
 <p align="center">
-	<a href="https://github.com/liguanqiao/grow"><img src="img/grow-logo.png" width="45%"></a>
+	<a href="https://github.com/liguanqiao/grow"><img src="https://cdn.jsdelivr.net/gh/liguanqiao/grow/img/grow-logo.png" width="45%"></a>
 </p>
 <p align="center">
 	<strong>🍬A module library that can improve the efficiency of Java development.</strong>
