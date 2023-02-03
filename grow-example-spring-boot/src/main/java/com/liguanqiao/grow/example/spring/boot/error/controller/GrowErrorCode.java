@@ -12,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum GrowErrorCode implements ErrorCode {
 
-    TEST(100000, "测试抛异常"),
+    TEST(100000, "测试异常"),
     ;
 
     private final int code;
