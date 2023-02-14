@@ -9,7 +9,7 @@
     <parent>
         <artifactId>grow-redis</artifactId>
         <groupId>com.liguanqiao</groupId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </parent>
 
     <artifactId>grow-redis-spring-template-boot-starter</artifactId>

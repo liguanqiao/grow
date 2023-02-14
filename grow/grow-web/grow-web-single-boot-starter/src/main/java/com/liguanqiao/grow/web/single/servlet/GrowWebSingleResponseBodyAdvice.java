@@ -46,6 +46,7 @@ public class GrowWebSingleResponseBodyAdvice implements ResponseBodyAdvice<Objec
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
         if(body instanceof String){
+            response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
             return JsonUtil.toJson(RespRes.of(BizMessage.ok(this.appName, getTraceId()), body));
         }
         if (body instanceof BizMessage) {
