@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.liguanqiao.grow.delay.quartz.spring.boot.autoconfigure.GrowDelayAutoConfiguration
+

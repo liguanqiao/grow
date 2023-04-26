@@ -125,6 +125,14 @@ public interface RedisOps {
 
     Set<String> sMembers(String key);
 
+    String sRandomMember(String key);
+
+    <T> Optional<T> sRandomMember(String key, Class<T> type);
+
+    Set<String> sRandomMember(String key, int count);
+
+    <T> Set<T> sRandomMember(String key, int count, Class<T> type);
+
     //~ ZSets
     <T> Boolean zAdd(String key, T value, double score);
 

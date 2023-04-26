@@ -305,6 +305,28 @@ public class RedisOpsSpringImpl implements RedisOps {
         return opsForSet().members(key);
     }
 
+    @Override
+    public String sRandomMember(String key) {
+        return opsForSet().randomMember(key);
+    }
+
+    @Override
+    public <T> Optional<T> sRandomMember(String key, Class<T> type) {
+        return toType(sRandomMember(key), type);
+    }
+
+    @Override
+    public Set<String> sRandomMember(String key, int count) {
+        return Optional.ofNullable(opsForSet().randomMembers(key, count))
+                .map(HashSet::new)
+                .orElseGet(HashSet::new);
+    }
+
+    @Override
+    public <T> Set<T> sRandomMember(String key, int count, Class<T> type) {
+        return toType(sRandomMember(key, count), type);
+    }
+
     //~ ZSet
     @Override
     public <T> Boolean zAdd(String key, T value, double score) {

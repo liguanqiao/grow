@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.liguanqiao</groupId>
+        <artifactId>grow-delay</artifactId>
+        <version>0.0.3</version>
+    </parent>
+
+    <artifactId>grow-delay-quartz</artifactId>
+    <name>${project.artifactId}</name>
+    <description>Grow 常用延迟任务封装Quartz实现</description>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <quartz.version>2.3.2</quartz.version>
+    </properties>
+
+    <dependencies>
+        <!--grow-->
+        <dependency>
+            <groupId>com.liguanqiao</groupId>
+            <artifactId>grow-delay-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

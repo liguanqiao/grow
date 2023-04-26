@@ -19,13 +19,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
- * KafkaMessageConverter
+ * RabbitMessageConverter
  *
  * @author liguanqiao
  * @since 2023/1/10
  **/
 @Getter
 @AllArgsConstructor
+@SuppressWarnings("NullableProblems")
 public class RabbitMessageConverter extends AbstractMessageConverter implements ReceiversMessageConverter {
 
     private final TracerContext tracerContext;
@@ -59,7 +60,7 @@ public class RabbitMessageConverter extends AbstractMessageConverter implements 
                 }
             }
         }
-        return content;
+        return new Message(content.getBytes(StandardCharsets.UTF_8), properties);
     }
 
 }

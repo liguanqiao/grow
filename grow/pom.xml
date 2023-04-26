@@ -10,7 +10,7 @@
     <artifactId>grow</artifactId>
     <version>0.0.3</version>
     <name>grow</name>
-    <description>Grow是一个可提高Java开发效率的模块库。</description>
+    <description>Grow是一个可提高JavaWeb开发效率的模块库。</description>
     <url>https://github.com/liguanqiao/grow</url>
 
     <modules>
@@ -22,6 +22,7 @@
         <module>grow-lock</module>
         <module>grow-web</module>
         <module>grow-orm</module>
+        <module>grow-delay</module>
     </modules>
 
     <properties>

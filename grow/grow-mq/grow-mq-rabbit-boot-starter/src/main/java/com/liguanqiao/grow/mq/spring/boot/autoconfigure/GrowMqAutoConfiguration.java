@@ -33,6 +33,7 @@ public class GrowMqAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public MessageConverter rabbitMessageConverter(@Autowired(required = false) TracerContext tracerContext) {
         return new RabbitMessageConverter(Optional.ofNullable(tracerContext).orElseGet(TracerContextDefaultImpl::new));
     }

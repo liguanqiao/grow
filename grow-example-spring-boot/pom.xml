@@ -45,6 +45,23 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
+        <!-- 数据库 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- 数据库连接池 -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+        <!--Mybatis-Plus-->
+        <dependency>
+            <groupId>com.liguanqiao</groupId>
+            <artifactId>grow-mybatis-plus-boot-starter</artifactId>
+            <version>${grow.version}</version>
+        </dependency>
         <!--grow-->
         <dependency>
             <groupId>com.liguanqiao</groupId>
@@ -58,8 +75,8 @@
         </dependency>
         <dependency>
             <groupId>com.liguanqiao</groupId>
-<!--            <artifactId>grow-log-tlog-boot-starter</artifactId>-->
-            <artifactId>grow-log-sleuth-boot-starter</artifactId>
+            <artifactId>grow-log-tlog-boot-starter</artifactId>
+<!--            <artifactId>grow-log-sleuth-boot-starter</artifactId>-->
             <version>${grow.version}</version>
         </dependency>
         <dependency>
@@ -70,6 +87,13 @@
         <dependency>
             <groupId>com.liguanqiao</groupId>
             <artifactId>grow-lock-integration-boot-starter</artifactId>
+            <version>${grow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.liguanqiao</groupId>
+<!--            <artifactId>grow-delay-rabbitmq-boot-starter</artifactId>-->
+<!--            <artifactId>grow-delay-quartz-boot-starter</artifactId>-->
+            <artifactId>grow-delay-redisson-boot-starter</artifactId>
             <version>${grow.version}</version>
         </dependency>
     </dependencies>

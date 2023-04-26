@@ -32,6 +32,7 @@ public class GrowMqAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public KafkaMessageConverter kafkaMessageConverter(@Autowired(required = false) TracerContext tracerContext) {
         return new KafkaMessageConverter(Optional.ofNullable(tracerContext).orElseGet(TracerContextDefaultImpl::new));
     }

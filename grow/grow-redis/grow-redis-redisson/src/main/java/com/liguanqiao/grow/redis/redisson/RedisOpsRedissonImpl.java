@@ -323,6 +323,26 @@ public class RedisOpsRedissonImpl implements RedisOps {
         return opsForSet(key).readAll();
     }
 
+    @Override
+    public String sRandomMember(String key) {
+        return opsForSet(key).random();
+    }
+
+    @Override
+    public <T> Optional<T> sRandomMember(String key, Class<T> type) {
+        return toType(sRandomMember(key), type);
+    }
+
+    @Override
+    public Set<String> sRandomMember(String key, int count) {
+        return opsForSet(key).random(count);
+    }
+
+    @Override
+    public <T> Set<T> sRandomMember(String key, int count, Class<T> type) {
+        return toType(sRandomMember(key, count), type);
+    }
+
     //~ ZSet
 
     @Override
