@@ -9,7 +9,7 @@
     <parent>
         <artifactId>grow-mq</artifactId>
         <groupId>com.liguanqiao</groupId>
-        <version>0.0.3</version>
+        <version>0.1.0</version>
     </parent>
 
     <artifactId>grow-mq-kafka-boot-starter</artifactId>
