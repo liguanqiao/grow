@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        group: ${spring.profiles.active}
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          # 是否使用service-id的小写，默认是大写
+          lower-case-service-id: true
+      ## 路由
+      routes:
+          - id: grow-example-orders
+            uri: lb://grow-example-orders
+            predicates:
+              - Path=/orders-api/**

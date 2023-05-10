@@ -1,0 +1,7 @@
+server:
+  port: 9030
+spring:
+  application:
+    name: grow-example-user
+  profiles:
+    active: dev

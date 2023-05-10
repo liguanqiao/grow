@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        group: ${spring.profiles.active}

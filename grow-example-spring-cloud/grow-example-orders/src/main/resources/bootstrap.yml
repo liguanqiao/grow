@@ -1,0 +1,15 @@
+server:
+  port: 9020
+
+spring:
+  application:
+    name: grow-example-orders
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss.SSS

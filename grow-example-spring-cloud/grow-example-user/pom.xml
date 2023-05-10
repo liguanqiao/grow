@@ -3,23 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.liguanqiao</groupId>
+        <artifactId>grow-example-spring-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-    <packaging>pom</packaging>
-
-    <groupId>com.liguanqiao</groupId>
-    <artifactId>grow-all</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <profiles>
-        <profile>
-            <id>spring-boot-example</id>
-            <modules>
-                <module>grow</module>
-                <module>grow-example-spring-boot</module>
-                <module>grow-example-spring-cloud</module>
-            </modules>
-        </profile>
-    </profiles>
+    <artifactId>grow-example-user</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

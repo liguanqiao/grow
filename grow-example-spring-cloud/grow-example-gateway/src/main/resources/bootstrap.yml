@@ -1,0 +1,27 @@
+server:
+  port: 9010
+spring:
+  application:
+    name: grow-example-gateway
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          # 是否使用service-id的小写，默认是大写
+          lower-case-service-id: true
+      ## 路由
+      routes:
+        - id: grow-example-orders
+          uri: lb://grow-example-orders
+#          predicates:
+#            - Path=/orders-api/**

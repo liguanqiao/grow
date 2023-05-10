@@ -40,8 +40,8 @@ spring:
             #打开群集功能
             isClustered: true
 
-logging:
-  config: classpath:log/logback-spring.xml
+#logging:
+#  config: classpath:log/logback-spring.xml
 
 tlog:
   enable-invoke-time-print: true
