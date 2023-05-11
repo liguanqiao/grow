@@ -19,7 +19,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <grow.version>0.1.0</grow.version>
+        <grow.version>0.1.1</grow.version>
         <lombok.version>1.18.24</lombok.version>
     </properties>
 
@@ -83,6 +83,11 @@
             <groupId>com.liguanqiao</groupId>
             <artifactId>grow-mq-rabbit-boot-starter</artifactId>
             <version>${grow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>com.liguanqiao</groupId>

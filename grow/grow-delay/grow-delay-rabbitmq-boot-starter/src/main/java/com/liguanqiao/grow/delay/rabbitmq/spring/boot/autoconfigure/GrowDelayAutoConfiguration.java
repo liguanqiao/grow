@@ -6,21 +6,18 @@ import com.liguanqiao.grow.delay.rabbitmq.DelayTaskOpsRabbitmqImpl;
 import com.liguanqiao.grow.delay.rabbitmq.config.DelayTaskHandlerEndpointRegister;
 import com.liguanqiao.grow.log.context.TracerContext;
 import com.liguanqiao.grow.log.context.TracerContextDefaultImpl;
-import com.liguanqiao.grow.mq.rabbit.RabbitMessageConverter;
+import com.liguanqiao.grow.log.util.TracerContextUtil;
+import com.liguanqiao.grow.mq.rabbit.GrowRabbitMessageConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 import java.util.List;
 import java.util.Optional;
-
-;
 
 /**
  * @author liguanqiao
@@ -30,29 +27,39 @@ import java.util.Optional;
 @Configuration
 public class GrowDelayAutoConfiguration {
 
-    @Order(1)
-    @ConditionalOnMissingBean
     @Bean
-    public DelayTaskOps delayTaskOps(RabbitTemplate template, @Autowired(required = false) TracerContext tracerContext) {
+    @ConditionalOnMissingBean
+    public DelayTaskOps delayTaskOps(RabbitTemplate rabbitTemplate, @Autowired(required = false) TracerContext tracerContext) {
         log.info(">>>>>>>>>>> Grow DelayTask RabbitMQ Config Init.");
-        return new DelayTaskOpsRabbitmqImpl(template, Optional.ofNullable(tracerContext).orElseGet(TracerContextDefaultImpl::new));
+        TracerContext tc = TracerContextUtil.getOrDefault(tracerContext);
+        return new DelayTaskOpsRabbitmqImpl(
+                Optional.of(rabbitTemplate)
+                        .filter(template -> GrowRabbitMessageConverter.class.isAssignableFrom(template.getMessageConverter().getClass()))
+                        .orElseGet(() -> createRabbitTemplate(rabbitTemplate.getConnectionFactory(), createRabbitMessageConverter(tc))),
+                tc
+        );
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public MessageConverter rabbitMessageConverter(@Autowired(required = false) TracerContext tracerContext) {
-        return new RabbitMessageConverter(Optional.ofNullable(tracerContext).orElseGet(TracerContextDefaultImpl::new));
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
     public DelayTaskHandlerEndpointRegister delayTaskHandlerEndpointRegister(List<DelayTaskHandler<?>> handlers,
                                                                              ConnectionFactory connectionFactory,
                                                                              DelayTaskOps delayTaskOps,
-                                                                             MessageConverter messageConverter) {
+                                                                             @Autowired(required = false) GrowRabbitMessageConverter messageConverter,
+                                                                             @Autowired(required = false) TracerContext tracerContext) {
         DelayTaskHandlerEndpointRegister register = new DelayTaskHandlerEndpointRegister(handlers);
-        register.registerAllEndpoints(connectionFactory, delayTaskOps, messageConverter);
+        register.registerAllEndpoints(connectionFactory, delayTaskOps, Optional.ofNullable(messageConverter)
+                .orElseGet(() -> createRabbitMessageConverter(tracerContext)));
         return register;
+    }
+
+    private RabbitTemplate createRabbitTemplate(ConnectionFactory connectionFactory, GrowRabbitMessageConverter messageConverter) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(messageConverter);
+        return template;
+    }
+
+    private GrowRabbitMessageConverter createRabbitMessageConverter(TracerContext tracerContext) {
+        return new GrowRabbitMessageConverter(TracerContextUtil.getOrDefault(tracerContext));
     }
 
 }
