@@ -1,7 +1,7 @@
 package com.liguanqiao.grow.mq.spring.boot.autoconfigure;
 
 import com.liguanqiao.grow.log.context.TracerContext;
-import com.liguanqiao.grow.log.context.TracerContextDefaultImpl;
+import com.liguanqiao.grow.log.util.TracerContextUtil;
 import com.liguanqiao.grow.mq.MqSender;
 import com.liguanqiao.grow.mq.kafka.KafkaMessageConverter;
 import com.liguanqiao.grow.mq.kafka.MqSenderKafkaImpl;
@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.kafka.core.KafkaTemplate;
-
-import java.util.Optional;
 
 /**
  * @author liguanqiao
@@ -28,13 +26,13 @@ public class GrowMqAutoConfiguration {
     @Bean
     public MqSender mqSender(KafkaTemplate<String, String> template, @Autowired(required = false) TracerContext tracerContext) {
         log.info(">>>>>>>>>>> Grow MqSender Kafka Config Init.");
-        return new MqSenderKafkaImpl(template, Optional.ofNullable(tracerContext).orElseGet(TracerContextDefaultImpl::new));
+        return new MqSenderKafkaImpl(template, TracerContextUtil.getOrDefault(tracerContext));
     }
 
     @Bean
     @ConditionalOnMissingBean
     public KafkaMessageConverter kafkaMessageConverter(@Autowired(required = false) TracerContext tracerContext) {
-        return new KafkaMessageConverter(Optional.ofNullable(tracerContext).orElseGet(TracerContextDefaultImpl::new));
+        return new KafkaMessageConverter(TracerContextUtil.getOrDefault(tracerContext));
     }
 
 }

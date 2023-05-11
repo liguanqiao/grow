@@ -7,6 +7,7 @@ import com.liguanqiao.grow.delay.error.DelayTaskException;
 import com.liguanqiao.grow.delay.handler.DelayTaskHandler;
 import com.liguanqiao.grow.json.JsonUtil;
 import com.liguanqiao.grow.log.context.TracerContext;
+import com.liguanqiao.grow.log.context.TracerContextDefaultImpl;
 import com.liguanqiao.grow.log.span.TracerSpan;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
@@ -22,6 +23,8 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 延迟任务Quartz执行器
+ *
  * @author liguanqiao
  * @since 2023/4/19
  **/
@@ -37,6 +40,15 @@ public class DelayTaskQuartzJobBean implements Job {
     private final Map<String, Type> dataTypeMap = new HashMap<>();
     private final DelayTaskOps ops;
     private final TracerContext tracerContext;
+
+    public DelayTaskQuartzJobBean(List<DelayTaskHandler<?>> handlers, DelayTaskOps ops) {
+        this.ops = ops;
+        this.tracerContext = new TracerContextDefaultImpl();
+        for (DelayTaskHandler<?> handler : handlers) {
+            handlerMap.put(handler.getTopic(), handler);
+            dataTypeMap.put(handler.getTopic(), TypeUtil.getTypeArgument(handler.getClass()));
+        }
+    }
 
     public DelayTaskQuartzJobBean(List<DelayTaskHandler<?>> handlers, DelayTaskOps ops, TracerContext tracerContext) {
         this.ops = ops;

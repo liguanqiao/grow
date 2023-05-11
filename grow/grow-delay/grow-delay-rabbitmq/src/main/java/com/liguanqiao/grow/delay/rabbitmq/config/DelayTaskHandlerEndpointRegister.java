@@ -15,11 +15,12 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import java.util.List;
 
 /**
+ * 分布式延迟任务处理器注册
+ *
  * @author liguanqiao
  * @since 2023/4/14
  **/
 public class DelayTaskHandlerEndpointRegister {
-
 
     public final List<DelayTaskHandler<?>> handlers;
 

@@ -16,6 +16,8 @@ import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 延迟任务RabbitMQ执行器
+ *
  * @author liguanqiao
  * @since 2023/3/30
  **/

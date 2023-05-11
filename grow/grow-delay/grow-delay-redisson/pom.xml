@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.liguanqiao</groupId>
         <artifactId>grow-delay</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.1</version>
     </parent>
 
     <artifactId>grow-delay-redisson</artifactId>

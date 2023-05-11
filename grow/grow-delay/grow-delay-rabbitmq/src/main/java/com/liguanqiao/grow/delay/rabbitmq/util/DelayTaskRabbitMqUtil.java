@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 延迟任务RabbitMQ工具类
+ *
  * @author liguanqiao
  * @since 2023/3/30
  **/
