@@ -19,7 +19,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <grow.version>0.1.1</grow.version>
+        <grow.version>0.1.2</grow.version>
         <lombok.version>1.18.24</lombok.version>
     </properties>
 
@@ -97,8 +97,8 @@
         <dependency>
             <groupId>com.liguanqiao</groupId>
 <!--            <artifactId>grow-delay-rabbitmq-boot-starter</artifactId>-->
-<!--            <artifactId>grow-delay-quartz-boot-starter</artifactId>-->
-            <artifactId>grow-delay-redisson-boot-starter</artifactId>
+            <artifactId>grow-delay-quartz-boot-starter</artifactId>
+<!--            <artifactId>grow-delay-redisson-boot-starter</artifactId>-->
             <version>${grow.version}</version>
         </dependency>
     </dependencies>
