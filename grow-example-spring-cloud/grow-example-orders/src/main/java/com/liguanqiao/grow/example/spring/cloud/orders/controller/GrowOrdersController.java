@@ -3,6 +3,7 @@ package com.liguanqiao.grow.example.spring.cloud.orders.controller;
 import com.liguanqiao.grow.example.spring.cloud.orders.error.GrowOrdersBizCode;
 import com.liguanqiao.grow.example.spring.cloud.orders.model.resp.GrowOrdersResp;
 import com.liguanqiao.grow.web.common.error.BizException;
+import com.liguanqiao.grow.web.common.error.CommonErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,4 +30,9 @@ public class GrowOrdersController {
         throw new BizException(GrowOrdersBizCode.TEST);
     }
 
+    @GetMapping("/error2")
+    public GrowOrdersResp error2() {
+        log.info("error2");
+        throw new RuntimeException("测试未知错误");
+    }
 }

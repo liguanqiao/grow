@@ -1,59 +1,53 @@
 package com.liguanqiao.grow.example.spring.cloud.filter.result;
 
-import com.liguanqiao.grow.json.JsonUtil;
-import com.liguanqiao.grow.web.common.payload.BizMessage;
-import com.liguanqiao.grow.web.common.payload.RespRes;
+import cn.hutool.core.util.StrUtil;
+import com.liguanqiao.grow.log.context.TracerContext;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferFactory;
-import org.springframework.core.io.buffer.DataBufferUtils;
-import org.springframework.http.HttpHeaders;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import javax.xml.ws.ResponseWrapper;
-import java.nio.charset.StandardCharsets;
+import java.net.URI;
+import java.util.Optional;
 
 /**
  * @author liguanqiao
  * @since 2023/5/5
  **/
-//@Component
-public class ResultRespGlobalFilter implements GlobalFilter {
+@Slf4j
+@Component
+public class ResultRespGlobalFilter implements GlobalFilter, Ordered {
+
+    @Autowired(required = false)
+    public TracerContext tracerContext;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-//        return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-//            ServerHttpResponse response = exchange.getResponse();
-//            HttpHeaders headers = response.getHeaders();
-//            MediaType mediaType = headers.getContentType();
-//
-//            if (mediaType != null && mediaType.isCompatibleWith(MediaType.APPLICATION_JSON)) {
-//                DataBufferFactory bufferFactory = response.bufferFactory();
-//                DataBuffer dataBuffer = bufferFactory.allocateBuffer();
-//                byte[] content = new byte[dataBuffer.readableByteCount()];
-//                dataBuffer.read(content);
-//                DataBufferUtils.release(dataBuffer);
-//                String originalBody = new String(content, StandardCharsets.UTF_8);
-//                Object data = JsonUtil.toBean(originalBody, Object.class);
-//                // 将原始响应体转换为统一响应实体
-//                RespRes<Object> wrapper = RespRes.of(BizMessage.ok(null,null),data);
-//                byte[] newBody = JsonUtil.toJson(wrapper).getBytes(StandardCharsets.UTF_8);
-//                response.getHeaders().setContentLength(newBody.length);
-//                response.writeWith(Mono.just(bufferFactory.wrap(newBody)));
-//            }
-//        }));
-//        exchange.getResponse().writeWith(dataBuf ->{
-//            dataBuf.
-//        })
-        return chain.filter(exchange).then();
+        return Optional.of(exchange.getResponse())
+                .map(response -> new ResultServerHttpResponseDecorator(response, tracerContext, getAppName(exchange)))
+                .map(response -> exchange.mutate().response(response).build())
+                .map(chain::filter)
+                .orElseGet(() -> chain.filter(exchange));
     }
 
+    @Override
+    public int getOrder() {
+        return -2;
+    }
+
+    private String getAppName(ServerWebExchange exchange) {
+        return Optional.ofNullable(exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR))
+                .filter(Route.class::isInstance)
+                .map(Route.class::cast)
+                .map(Route::getUri)
+                .map(URI::getHost)
+                .orElse(StrUtil.EMPTY);
+    }
 }

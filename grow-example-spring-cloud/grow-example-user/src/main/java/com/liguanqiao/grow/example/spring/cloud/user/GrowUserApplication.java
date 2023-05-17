@@ -13,7 +13,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 public class GrowUserApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GrowOrdersApplication.class);
+        SpringApplication.run(GrowUserApplication.class);
     }
 
 }

@@ -2,6 +2,8 @@ server:
   port: 9020
 
 spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
   application:
     name: grow-example-orders
   profiles:
@@ -13,3 +15,28 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss.SSS
+
+logging:
+#  config: classpath:log/logback-spring.xml
+  level:
+    org.zalando.logbook: trace
+
+logbook:
+  filter:
+    form-request-mode: parameter
+  format:
+    style: http
+  write:
+    max-body-size: 10000
+  exclude:
+    # 排除字体
+    - /cli/fonts/**
+    # 排除websocket
+    - /cli/socket
+    # 排除swagger
+    - /v3/api-docs
+    - /swagger-resources/**
+    - /swagger-ui/**
+  obfuscate:
+    headers:
+      - no-obfuscate

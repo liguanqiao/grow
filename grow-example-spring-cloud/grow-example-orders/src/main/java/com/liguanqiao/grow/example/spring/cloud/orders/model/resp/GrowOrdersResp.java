@@ -1,6 +1,7 @@
 package com.liguanqiao.grow.example.spring.cloud.orders.model.resp;
 
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -28,7 +29,7 @@ public class GrowOrdersResp {
 
     public static GrowOrdersResp create() {
         return new GrowOrdersResp()
-                .setStr(RandomUtil.randomString(16))
+                .setStr(RandomUtil.randomString(16) + StrUtil.UNDERLINE + RandomUtil.randomChinese())
                 .setLon(RandomUtil.randomLong())
                 .setDou(RandomUtil.randomDouble())
                 .setBigDecimal(RandomUtil.randomBigDecimal())
