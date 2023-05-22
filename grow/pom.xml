@@ -8,7 +8,7 @@
 
     <groupId>com.liguanqiao</groupId>
     <artifactId>grow</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <name>grow</name>
     <description>Grow是一个可提高JavaWeb开发效率的模块库。</description>
     <url>https://github.com/liguanqiao/grow</url>

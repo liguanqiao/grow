@@ -9,7 +9,7 @@
     <parent>
         <artifactId>grow</artifactId>
         <groupId>com.liguanqiao</groupId>
-        <version>0.1.1</version>
+        <version>0.1.2</version>
     </parent>
 
     <artifactId>grow-core</artifactId>

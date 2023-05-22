@@ -8,16 +8,21 @@ import com.liguanqiao.grow.delay.quartz.job.DelayTaskQuartzJobBean;
 import com.liguanqiao.grow.log.context.TracerContext;
 import com.liguanqiao.grow.log.util.TracerContextUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.Job;
-import org.quartz.Scheduler;
+import org.quartz.*;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
+import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
+import org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * 延迟任务自动装配
@@ -41,11 +46,38 @@ public class GrowDelayAutoConfiguration {
         return new DelayTaskQuartzJobBean(handlers, delayTaskOps, TracerContextUtil.getOrDefault(tracerContext));
     }
 
+    /**
+     * 复制于{@link QuartzAutoConfiguration#quartzScheduler}，主要更换JobFactory
+     **/
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(ApplicationContext applicationContext) {
+    public SchedulerFactoryBean quartzScheduler(QuartzProperties properties, ObjectProvider<SchedulerFactoryBeanCustomizer> customizers, ObjectProvider<JobDetail> jobDetails,
+                                                Map<String, Calendar> calendars, ObjectProvider<Trigger> triggers, ApplicationContext applicationContext) {
         SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
-        schedulerFactoryBean.setJobFactory(new GrowSpringJobFactory(applicationContext));
+        GrowSpringJobFactory jobFactory = new GrowSpringJobFactory(applicationContext);
+        schedulerFactoryBean.setJobFactory(jobFactory);
+        if (properties.getSchedulerName() != null) {
+            schedulerFactoryBean.setSchedulerName(properties.getSchedulerName());
+        }
+
+        schedulerFactoryBean.setAutoStartup(properties.isAutoStartup());
+        schedulerFactoryBean.setStartupDelay((int) properties.getStartupDelay().getSeconds());
+        schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(properties.isWaitForJobsToCompleteOnShutdown());
+        schedulerFactoryBean.setOverwriteExistingJobs(properties.isOverwriteExistingJobs());
+        if (!properties.getProperties().isEmpty()) {
+            schedulerFactoryBean.setQuartzProperties(this.asProperties(properties.getProperties()));
+        }
+
+        schedulerFactoryBean.setJobDetails(jobDetails.orderedStream().toArray(JobDetail[]::new));
+        schedulerFactoryBean.setCalendars(calendars);
+        schedulerFactoryBean.setTriggers(triggers.orderedStream().toArray(Trigger[]::new));
+        customizers.orderedStream().forEach((customizer) -> customizer.customize(schedulerFactoryBean));
         return schedulerFactoryBean;
+    }
+
+    private Properties asProperties(Map<String, String> source) {
+        Properties properties = new Properties();
+        properties.putAll(source);
+        return properties;
     }
 
 }
