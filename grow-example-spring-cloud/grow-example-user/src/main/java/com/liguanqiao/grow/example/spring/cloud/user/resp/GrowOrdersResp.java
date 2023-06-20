@@ -1,4 +1,4 @@
-package com.liguanqiao.grow.example.spring.cloud.orders.model.resp;
+package com.liguanqiao.grow.example.spring.cloud.user.resp;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;

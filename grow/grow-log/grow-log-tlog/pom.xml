@@ -55,6 +55,11 @@
             <artifactId>tlog-webroot</artifactId>
             <version>${tlog.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.yomahub</groupId>
+            <artifactId>tlog-gateway</artifactId>
+            <version>${tlog.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

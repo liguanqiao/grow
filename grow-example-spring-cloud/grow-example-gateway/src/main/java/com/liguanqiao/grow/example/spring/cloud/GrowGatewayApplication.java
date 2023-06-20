@@ -3,6 +3,7 @@ package com.liguanqiao.grow.example.spring.cloud;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.zalando.logbook.servlet.LogbookFilter;
 
 /**
  * @author liguanqiao

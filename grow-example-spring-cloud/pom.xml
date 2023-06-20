@@ -32,7 +32,7 @@
         <spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>
         <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
         <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
-        <grow.version>0.1.0</grow.version>
+        <grow.version>0.1.2</grow.version>
         <logbook.version>2.14.0</logbook.version>
     </properties>
 

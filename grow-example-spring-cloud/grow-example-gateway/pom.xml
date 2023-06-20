@@ -49,8 +49,8 @@
         </dependency>
         <dependency>
             <groupId>com.liguanqiao</groupId>
-            <!--            <artifactId>grow-log-tlog-boot-starter</artifactId>-->
-            <artifactId>grow-log-sleuth-boot-starter</artifactId>
+            <artifactId>grow-log-tlog-boot-starter</artifactId>
+            <!--            <artifactId>grow-log-sleuth-boot-starter</artifactId>-->
             <version>${grow.version}</version>
         </dependency>
         <!--Logbook-->

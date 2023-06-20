@@ -1,5 +1,11 @@
 server:
   port: 9010
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+
 spring:
   application:
     name: grow-example-gateway
@@ -27,9 +33,10 @@ spring:
 #            - Path=/orders-api/**
 
 logging:
-  #  config: classpath:log/logback-spring.xml
+  config: classpath:log/logback-spring.xml
   level:
     org.zalando.logbook: trace
+    com.yomahub.tlog: debug
 
 logbook:
   filter:

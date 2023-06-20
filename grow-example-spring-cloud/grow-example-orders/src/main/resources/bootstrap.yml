@@ -1,5 +1,10 @@
 server:
   port: 9020
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
 
 spring:
   mvc:
@@ -17,9 +22,10 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss.SSS
 
 logging:
-#  config: classpath:log/logback-spring.xml
+  config: classpath:log/logback-spring.xml
   level:
     org.zalando.logbook: trace
+    com.yomahub.tlog: debug
 
 logbook:
   filter:
