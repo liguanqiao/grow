@@ -1,6 +1,8 @@
 package com.liguanqiao.grow.redis.spring.boot.autoconfigure;
 
 import com.liguanqiao.grow.redis.RedisOps;
+import com.liguanqiao.grow.redis.serializer.DefaultRedisOpsSerializer;
+import com.liguanqiao.grow.redis.serializer.RedisOpsSerializer;
 import com.liguanqiao.grow.redis.spring.RedisOpsSpringImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,8 +22,15 @@ public class GrowRedisAutoConfiguration {
     @Order(1)
     @ConditionalOnMissingBean
     @Bean
-    public RedisOps redisOpsSpring(StringRedisTemplate template) {
+    public RedisOps redisOpsSpring(StringRedisTemplate template, RedisOpsSerializer serializer) {
         log.info(">>>>>>>>>>> Grow RedisOps SpringTemplate Config Init.");
-        return new RedisOpsSpringImpl(template);
+        return new RedisOpsSpringImpl(template, serializer);
     }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public RedisOpsSerializer redisOpsSerializer() {
+        return new DefaultRedisOpsSerializer();
+    }
+
 }

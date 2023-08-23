@@ -21,12 +21,12 @@ public class GrowMqServiceImpl implements GrowMqService {
 
     @Override
     public void send() {
-        mqSender.send(GrowMqConstant.TOPIC, GrowMqValueDTO.create());
+        mqSender.send(GrowMqConstant.TOPIC, GrowMqConstant.KEY, GrowMqValueDTO.create());
     }
 
     @Override
     public void send(String str) {
-        mqSender.send(GrowMqConstant.TOPIC, GrowMqValueDTO.create().setStr(str));
+        mqSender.send(GrowMqConstant.TOPIC, GrowMqConstant.KEY, GrowMqValueDTO.create().setStr(str));
     }
 
 }

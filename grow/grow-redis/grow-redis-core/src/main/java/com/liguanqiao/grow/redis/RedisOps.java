@@ -20,17 +20,11 @@ public interface RedisOps {
     //~ String
     <T> Optional<T> get(String key, Class<T> type);
 
-    String get(String key);
-
     <T> void set(String key, T value);
 
     <T> Optional<T> getAndSet(String key, T value, Class<T> type);
 
-    String getAndSet(String key, String value);
-
     <T> Optional<T> getRange(String key, long start, long end, Class<T> type);
-
-    String getRange(String key, long start, long end);
 
     <T> void setRange(String key, T value, long offset);
 
@@ -42,7 +36,7 @@ public interface RedisOps {
 
     <T> List<T> mGet(Class<T> type, String... keys);
 
-    List<String> mGet(String... keys);
+    <T> List<T> mGet(Class<T> type, Collection<String> keys);
 
     <T> void mSet(Map<String, T> map);
 
@@ -59,34 +53,36 @@ public interface RedisOps {
     Boolean getBit(String key, long offset);
 
     //~ Lists
-    <T> Optional<T> lPop(String key, Class<T> type);
+    <T> Optional<T> lGet(String key, int index, Class<T> type);
 
-    String lPop(String key);
+    <T> void lSet(String key, int index, T value);
 
-    <T> Optional<T> rPop(String key, Class<T> type);
+    <T> Optional<T> lLeftPop(String key, Class<T> type);
 
-    String rPop(String key);
+    <T> Optional<T> lRightPop(String key, Class<T> type);
 
-    Long lPush(String key, Object... values);
+    Long lLeftPush(String key, Object... values);
 
-    List<String> lRange(String key, long start, long end);
+    <T> Long lLeftPush(String key, Collection<T> values);
 
-    <T> List<T> lRange(String key, long start, long end, Class<T> type);
+    <T> List<T> lRange(String key, int start, int end, Class<T> type);
 
-    Long rPush(String key, Object... values);
+    Long lRightPush(String key, Object... values);
+
+    <T> Long lRightPush(String key, Collection<T> values);
 
     Long lLen(String key);
 
     //~ Hashes
     Long hDel(String key, String... fields);
 
-    <T> Optional<T> hGet(String key, String field, Class<T> type);
+    Long hDel(String key, Collection<String> fields);
 
-    String hGet(String key, String field);
+    <T> Optional<T> hGet(String key, String field, Class<T> type);
 
     <T> List<T> hMGet(String key, Class<T> type, String... fields);
 
-    List<String> hMGet(String key, String... fields);
+    <T> List<T> hMGet(String key, Class<T> type, Collection<String> fields);
 
     <T, K, V> Map<K, V> hMGet(String key, Collection<String> fields, Class<T> type, Function<T, K> keyMapper, Function<T, V> valueMapper);
 
@@ -99,8 +95,6 @@ public interface RedisOps {
     Boolean hExists(String key, String field);
 
     <T> Map<String, T> hGetAll(String key, Class<T> type);
-
-    Map<String, String> hGetAll(String key);
 
     Set<String> hKeys(String key);
 
@@ -115,26 +109,24 @@ public interface RedisOps {
     //~ Sets
     Long sAdd(String key, Object... members);
 
-    Long sLen(String key);
+    <T> Long sAdd(String key, Collection<T> members);
 
-    String sPop(String key);
+    Long sLen(String key);
 
     <T> Optional<T> sPop(String key, Class<T> type);
 
     <T> Boolean sIsMember(String key, T member);
 
-    Set<String> sMembers(String key);
-
-    String sRandomMember(String key);
+    <T> Set<T> sMembers(String key, Class<T> type);
 
     <T> Optional<T> sRandomMember(String key, Class<T> type);
-
-    Set<String> sRandomMember(String key, int count);
 
     <T> Set<T> sRandomMember(String key, int count, Class<T> type);
 
     //~ ZSets
     <T> Boolean zAdd(String key, T value, double score);
+
+    <T> Long zAdd(String key, Map<T, Double> values);
 
     Long zCount(String key, double min, double max);
 
@@ -142,28 +134,24 @@ public interface RedisOps {
 
     Boolean zRemove(String key, Object... members);
 
+    <T> Boolean zRemove(String key, Collection<T> members);
+
     <T> Long zRank(String key, T member);
 
     <T> Long zRevRank(String key, T member);
 
     Long zLen(String key);
 
-    Set<String> zRange(String key, long start, long end);
-
-    <T> Set<T> zRange(String key, long start, long end, Class<T> type);
-
-    Set<String> zRangeByScore(String key, double min, double max);
+    <T> Set<T> zRange(String key, int start, int end, Class<T> type);
 
     <T> Set<T> zRangeByScore(String key, double min, double max, Class<T> type);
-
-    Set<String> zRevRangeByScore(String key, double min, double max);
 
     <T> Set<T> zRevRangeByScore(String key, double min, double max, Class<T> type);
 
     //~ Geos
 
     /**
-     * 经纬度校验，由EPSG:900913 / EPSG:3785 / OSGEO:41001 规定如下：
+     * 经纬度校验，由 EPSG:900913 / EPSG:3785 / OSGEO:41001 规定如下：
      * 有效的经度从-180度到180度
      * 有效的纬度从-85.05112878度到85.05112878度 与正常地理上的-90度～90度有差别
      *
@@ -235,6 +223,8 @@ public interface RedisOps {
      */
     List<String> geoHash(String key, String... pointNames);
 
+    List<String> geoHash(String key, Collection<String> pointNames);
+
     /**
      * 获取一个或多个成员的位置的点经纬度信息
      *
@@ -243,6 +233,8 @@ public interface RedisOps {
      * @return 经纬点列表
      */
     List<RedisGeoPoint> geoPosition(String key, String... pointNames);
+
+    List<RedisGeoPoint> geoPosition(String key, Collection<String> pointNames);
 
     /**
      * 以给定的距离和指定的集合中的某个点，返回包含在指定半径距离中的指定数量的元素
@@ -289,14 +281,37 @@ public interface RedisOps {
      */
     Boolean geoRemove(String key, String... pointNames);
 
+    Boolean geoRemove(String key, Collection<String> pointNames);
+
     //~ Commons
     void del(String... keys);
+
+    void del(Collection<String> keys);
 
     Boolean expire(String key, long timeout, TimeUnit timeunit);
 
     long expire(long timeout, TimeUnit timeunit, String... keys);
 
+    long expire(long timeout, TimeUnit timeunit, Collection<String> keys);
+
     boolean exists(String key);
+
+    /**
+     * 获取Key剩余存活时间
+     *
+     * @param key      不能为 {@literal null}
+     * @param timeunit 返回存活时间单位
+     * @return 存活时间 <br/> 不存在返回 -2 <br/> 永久返回 -1
+     * @see <a href="https://redis.io/commands/ttl">Redis Documentation: TTL</a>
+     **/
+    long ttl(String key, TimeUnit timeunit);
+
+    /**
+     * @see #ttl(String, TimeUnit)
+     **/
+    default long ttl(String key) {
+        return ttl(key, TimeUnit.MILLISECONDS);
+    }
 
     /**
      * 扫描Keys

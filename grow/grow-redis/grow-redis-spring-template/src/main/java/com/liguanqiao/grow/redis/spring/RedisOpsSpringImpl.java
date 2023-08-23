@@ -1,13 +1,16 @@
 package com.liguanqiao.grow.redis.spring;
 
 import cn.hutool.core.collection.CollUtil;
+import com.liguanqiao.grow.redis.AbsRedisOps;
 import com.liguanqiao.grow.redis.RedisOps;
 import com.liguanqiao.grow.redis.model.RedisGeoPoint;
 import com.liguanqiao.grow.redis.model.RedisGeoResult;
 import com.liguanqiao.grow.redis.model.RedisMetric;
+import com.liguanqiao.grow.redis.serializer.RedisOpsSerializer;
 import com.liguanqiao.grow.redis.spring.model.RedisSpringMetricRelevance;
-import com.liguanqiao.grow.redis.util.RedisSerializeUtil;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.*;
@@ -25,83 +28,75 @@ import static java.util.stream.Collectors.toMap;
  * @since 2023/1/4
  **/
 @AllArgsConstructor
-public class RedisOpsSpringImpl implements RedisOps {
+public class RedisOpsSpringImpl extends AbsRedisOps implements RedisOps {
 
     private final StringRedisTemplate template;
+    @Getter(value = AccessLevel.PROTECTED)
+    private final RedisOpsSerializer serializer;
 
     @Override
     public <T> Optional<T> get(String key, Class<T> type) {
-        return toType(get(key), type);
-    }
-
-    @Override
-    public String get(String key) {
-        return opsForValue().get(key);
+        return Optional.ofNullable(opsForValue().get(key))
+                .map(rawVal -> deserialize(rawVal, type));
     }
 
     @Override
     public <T> void set(String key, T value) {
-        opsForValue().set(key, toString(value));
+        opsForValue().set(key, serialize(value));
     }
 
     @Override
     public <T> Optional<T> getAndSet(String key, T value, Class<T> type) {
-        return toType(getAndSet(key, toString(value)), type);
-    }
-
-    @Override
-    public String getAndSet(String key, String value) {
-        return opsForValue().getAndSet(key, value);
+        return Optional.ofNullable(opsForValue().getAndSet(key, serialize(value)))
+                .map(rawVal -> deserialize(rawVal, type));
     }
 
     @Override
     public <T> Optional<T> getRange(String key, long start, long end, Class<T> type) {
-        return toType(opsForValue().get(key, start, end), type);
-    }
-
-    @Override
-    public String getRange(String key, long start, long end) {
-        return opsForValue().get(key, start, end);
+        return Optional.ofNullable(opsForValue().get(key, start, end))
+                .map(rawVal -> deserialize(rawVal, type));
     }
 
     @Override
     public <T> void setRange(String key, T value, long offset) {
-        opsForValue().set(key, toString(value), offset);
+        opsForValue().set(key, serialize(value), offset);
     }
 
     @Override
     public <T> void setEx(String key, T value, long timeout, TimeUnit timeunit) {
-        opsForValue().set(key, toString(value), timeout, timeunit);
+        opsForValue().set(key, serialize(value), timeout, timeunit);
     }
 
     @Override
     public <T> Boolean setNx(String key, T value) {
-        return opsForValue().setIfAbsent(key, toString(value));
+        return opsForValue().setIfAbsent(key, serialize(value));
     }
 
     @Override
     public <T> Boolean setNx(String key, T value, long timeout, TimeUnit timeunit) {
-        return opsForValue().setIfAbsent(key, toString(value), timeout, timeunit);
+        return opsForValue().setIfAbsent(key, serialize(value), timeout, timeunit);
     }
 
     @Override
     public <T> List<T> mGet(Class<T> type, String... keys) {
-        return Optional.ofNullable(mGet(keys))
-                .map(list -> list.stream().map(RedisSerializeUtil.castType(type)).collect(Collectors.toList()))
+        return mGet(type, Arrays.asList(keys));
+    }
+
+    @Override
+    public <T> List<T> mGet(Class<T> type, Collection<String> keys) {
+        return Optional.ofNullable(opsForValue().multiGet(keys))
+                .map(rawVal -> deserialize2List(rawVal, type))
                 .orElseGet(ArrayList::new);
     }
 
     @Override
-    public List<String> mGet(String... keys) {
-        return opsForValue().multiGet(Arrays.stream(keys).collect(Collectors.toList()));
-    }
-
-    @Override
     public <T> void mSet(Map<String, T> map) {
-        opsForValue().multiSet(map.entrySet()
-                .stream()
-                .collect(toMap(Map.Entry::getKey,
-                        RedisSerializeUtil.valueToString().compose(Map.Entry::getValue))));
+        opsForValue().multiSet(
+                map.entrySet()
+                        .stream()
+                        .filter(e -> Objects.nonNull(e.getKey()) && Objects.nonNull(e.getValue()))
+                        .collect(toMap(Map.Entry::getKey, e -> serialize(e.getValue())))
+        );
     }
 
     @Override
@@ -136,43 +131,53 @@ public class RedisOpsSpringImpl implements RedisOps {
 
     //~ Lists
     @Override
-    public <T> Optional<T> lPop(String key, Class<T> type) {
-        return toType(lPop(key), type);
+    public <T> Optional<T> lGet(String key, int index, Class<T> type) {
+        return Optional.ofNullable(opsForList().index(key, index))
+                .map(rawVal -> deserialize(rawVal, type));
     }
 
     @Override
-    public String lPop(String key) {
-        return opsForList().leftPop(key);
+    public <T> void lSet(String key, int index, T value) {
+        opsForList().set(key, index, serialize(value));
     }
 
     @Override
-    public <T> Optional<T> rPop(String key, Class<T> type) {
-        return toType(rPop(key), type);
+    public <T> Optional<T> lLeftPop(String key, Class<T> type) {
+        return Optional.ofNullable(opsForList().leftPop(key))
+                .map(rawVal -> deserialize(rawVal, type));
     }
 
     @Override
-    public String rPop(String key) {
-        return opsForList().rightPop(key);
+    public <T> Optional<T> lRightPop(String key, Class<T> type) {
+        return Optional.ofNullable(opsForList().rightPop(key))
+                .map(rawVal -> deserialize(rawVal, type));
     }
 
     @Override
-    public Long lPush(String key, Object... values) {
-        return opsForList().leftPushAll(key, toStrings(values));
+    public Long lLeftPush(String key, Object... values) {
+        return opsForList().leftPushAll(key, serialize2List(values));
     }
 
     @Override
-    public List<String> lRange(String key, long start, long end) {
-        return opsForList().range(key, start, end);
+    public <T> Long lLeftPush(String key, Collection<T> values) {
+        return opsForList().leftPushAll(key, serialize2List(values));
     }
 
     @Override
-    public <T> List<T> lRange(String key, long start, long end, Class<T> type) {
-        return toType(lRange(key, start, end), type);
+    public <T> List<T> lRange(String key, int start, int end, Class<T> type) {
+        return Optional.ofNullable(opsForList().range(key, start, end))
+                .map(rawVal -> deserialize2List(rawVal, type))
+                .orElseGet(ArrayList::new);
     }
 
     @Override
-    public Long rPush(String key, Object... values) {
-        return opsForList().rightPushAll(key, toStrings(values));
+    public Long lRightPush(String key, Object... values) {
+        return opsForList().rightPushAll(key, serialize2List(values));
+    }
+
+    @Override
+    public <T> Long lRightPush(String key, Collection<T> values) {
+        return opsForList().rightPushAll(key, serialize2List(values));
     }
 
     @Override
@@ -187,23 +192,26 @@ public class RedisOpsSpringImpl implements RedisOps {
     }
 
     @Override
-    public <T> Optional<T> hGet(String key, String field, Class<T> type) {
-        return toType(hGet(key, field), type);
+    public Long hDel(String key, Collection<String> fields) {
+        return opsForHash().delete(key, fields.toArray());
     }
 
     @Override
-    public String hGet(String key, String field) {
-        return opsForHash().get(key, field);
+    public <T> Optional<T> hGet(String key, String field, Class<T> type) {
+        return Optional.ofNullable(opsForHash().get(key, field))
+                .map(rawVal -> deserialize(rawVal, type));
     }
 
     @Override
     public <T> List<T> hMGet(String key, Class<T> type, String... fields) {
-        return toType(hMGet(key, fields), type);
+        return hMGet(key, type, Arrays.asList(fields));
     }
 
     @Override
-    public List<String> hMGet(String key, String... fields) {
-        return opsForHash().multiGet(key, Arrays.asList(fields));
+    public <T> List<T> hMGet(String key, Class<T> type, Collection<String> fields) {
+        return Optional.ofNullable(opsForHash().multiGet(key, fields))
+                .map(rawVal -> deserialize2List(rawVal, type))
+                .orElseGet(ArrayList::new);
     }
 
     @Override
@@ -211,20 +219,20 @@ public class RedisOpsSpringImpl implements RedisOps {
         return opsForHash().multiGet(key, fields)
                 .stream()
                 .filter(Objects::nonNull)
-                .map(RedisSerializeUtil.castType(type))
+                .map(rawVal -> deserialize(rawVal, type))
                 .collect(Collectors.toMap(keyMapper, valueMapper));
     }
 
     @Override
     public <T> void hSet(String key, String field, T value) {
-        opsForHash().put(key, field, toString(value));
+        opsForHash().put(key, field, serialize(value));
     }
 
     @Override
     public <T> void hMSet(String key, Map<String, T> fieldValues) {
         opsForHash().putAll(key, fieldValues.entrySet()
                 .stream()
-                .collect(toMap(Map.Entry::getKey, RedisSerializeUtil.valueToString().compose(Map.Entry::getValue))));
+                .collect(toMap(Map.Entry::getKey, e -> serialize(e.getValue()))));
     }
 
     @Override
@@ -239,14 +247,10 @@ public class RedisOpsSpringImpl implements RedisOps {
 
     @Override
     public <T> Map<String, T> hGetAll(String key, Class<T> type) {
-        return hGetAll(key).entrySet()
+        return opsForHash().entries(key).entrySet()
                 .stream()
-                .collect(toMap(Map.Entry::getKey, RedisSerializeUtil.castType(type).compose(Map.Entry::getValue)));
-    }
-
-    @Override
-    public Map<String, String> hGetAll(String key) {
-        return opsForHash().entries(key);
+                .filter(e -> Objects.nonNull(e.getKey()) && Objects.nonNull(e.getValue()))
+                .collect(toMap(Map.Entry::getKey, e -> deserialize(e.getValue(), type)));
     }
 
     @Override
@@ -277,7 +281,12 @@ public class RedisOpsSpringImpl implements RedisOps {
     //~ Sets
     @Override
     public Long sAdd(String key, Object... members) {
-        return opsForSet().add(key, toStrings(members));
+        return opsForSet().add(key, serialize2Array(members));
+    }
+
+    @Override
+    public <T> Long sAdd(String key, Collection<T> members) {
+        return opsForSet().add(key, serialize2Array(members));
     }
 
     @Override
@@ -286,51 +295,51 @@ public class RedisOpsSpringImpl implements RedisOps {
     }
 
     @Override
-    public String sPop(String key) {
-        return opsForSet().pop(key);
-    }
-
-    @Override
     public <T> Optional<T> sPop(String key, Class<T> type) {
-        return toType(sPop(key), type);
+        return Optional.ofNullable(opsForSet().pop(key))
+                .map(rawVal -> deserialize(rawVal, type));
     }
 
     @Override
     public <T> Boolean sIsMember(String key, T member) {
-        return opsForSet().isMember(key, toString(member));
+        return opsForSet().isMember(key, serialize(member));
     }
 
     @Override
-    public Set<String> sMembers(String key) {
-        return opsForSet().members(key);
-    }
-
-    @Override
-    public String sRandomMember(String key) {
-        return opsForSet().randomMember(key);
-    }
-
-    @Override
-    public <T> Optional<T> sRandomMember(String key, Class<T> type) {
-        return toType(sRandomMember(key), type);
-    }
-
-    @Override
-    public Set<String> sRandomMember(String key, int count) {
-        return Optional.ofNullable(opsForSet().randomMembers(key, count))
-                .map(HashSet::new)
+    public <T> Set<T> sMembers(String key, Class<T> type) {
+        return Optional.ofNullable(opsForSet().members(key))
+                .map(rawVal -> deserialize2Set(rawVal, type))
                 .orElseGet(HashSet::new);
     }
 
     @Override
+    public <T> Optional<T> sRandomMember(String key, Class<T> type) {
+        return Optional.ofNullable(opsForSet().randomMember(key))
+                .map(rawVal -> deserialize(rawVal, type));
+    }
+
+    @Override
     public <T> Set<T> sRandomMember(String key, int count, Class<T> type) {
-        return toType(sRandomMember(key, count), type);
+        return Optional.ofNullable(opsForSet().randomMembers(key, count))
+                .map(rawVal -> deserialize2Set(rawVal, type))
+                .orElseGet(HashSet::new);
     }
 
     //~ ZSet
     @Override
     public <T> Boolean zAdd(String key, T value, double score) {
-        return opsForZSet().add(key, toString(value), score);
+        return opsForZSet().add(key, serialize(value), score);
+    }
+
+    @Override
+    public <T> Long zAdd(String key, Map<T, Double> values) {
+        return opsForZSet().add(
+                key,
+                values.entrySet()
+                        .stream()
+                        .map(e -> new DefaultTypedTuple<>(serialize(e.getKey()), e.getValue()))
+                        .collect(Collectors.toSet())
+        );
     }
 
     @Override
@@ -345,19 +354,26 @@ public class RedisOpsSpringImpl implements RedisOps {
 
     @Override
     public Boolean zRemove(String key, Object... members) {
-        return Optional.ofNullable(opsForZSet().remove(key, Arrays.stream(members).map(this::toString).toArray()))
+        return Optional.ofNullable(opsForZSet().remove(key, Arrays.stream(members).map(this::serialize).toArray()))
+                .map(count -> count > 0)
+                .orElse(Boolean.FALSE);
+    }
+
+    @Override
+    public <T> Boolean zRemove(String key, Collection<T> members) {
+        return Optional.ofNullable(opsForZSet().remove(key, members.stream().map(this::serialize).toArray()))
                 .map(count -> count > 0)
                 .orElse(Boolean.FALSE);
     }
 
     @Override
     public <T> Long zRank(String key, T member) {
-        return opsForZSet().rank(key, toString(member));
+        return opsForZSet().rank(key, serialize(member));
     }
 
     @Override
     public <T> Long zRevRank(String key, T member) {
-        return opsForZSet().reverseRank(key, toString(member));
+        return opsForZSet().reverseRank(key, serialize(member));
     }
 
     @Override
@@ -366,33 +382,24 @@ public class RedisOpsSpringImpl implements RedisOps {
     }
 
     @Override
-    public Set<String> zRange(String key, long start, long end) {
-        return opsForZSet().range(key, start, end);
-    }
-
-    @Override
-    public <T> Set<T> zRange(String key, long start, long end, Class<T> type) {
-        return toType(zRange(key, start, end), type);
-    }
-
-    @Override
-    public Set<String> zRangeByScore(String key, double min, double max) {
-        return opsForZSet().rangeByScore(key, min, max);
+    public <T> Set<T> zRange(String key, int start, int end, Class<T> type) {
+        return Optional.ofNullable(opsForZSet().range(key, start, end))
+                .map(rawVal -> deserialize2Set(rawVal, type))
+                .orElseGet(HashSet::new);
     }
 
     @Override
     public <T> Set<T> zRangeByScore(String key, double min, double max, Class<T> type) {
-        return toType(zRangeByScore(key, min, max), type);
-    }
-
-    @Override
-    public Set<String> zRevRangeByScore(String key, double min, double max) {
-        return opsForZSet().reverseRangeByScore(key, min, max);
+        return Optional.ofNullable(opsForZSet().rangeByScore(key, min, max))
+                .map(rawVal -> deserialize2Set(rawVal, type))
+                .orElseGet(HashSet::new);
     }
 
     @Override
     public <T> Set<T> zRevRangeByScore(String key, double min, double max, Class<T> type) {
-        return toType(zRevRangeByScore(key, min, max), type);
+        return Optional.ofNullable(opsForZSet().reverseRangeByScore(key, min, max))
+                .map(rawVal -> deserialize2Set(rawVal, type))
+                .orElseGet(HashSet::new);
     }
 
     //~ Geos
@@ -464,8 +471,20 @@ public class RedisOpsSpringImpl implements RedisOps {
     }
 
     @Override
+    public List<String> geoHash(String key, Collection<String> pointNames) {
+        return opsForGeo().hash(key, pointNames.toArray(new String[0]));
+    }
+
+    @Override
     public List<RedisGeoPoint> geoPosition(String key, String... pointNames) {
         return Optional.ofNullable(opsForGeo().position(key, pointNames))
+                .map(list -> list.stream().map(point -> new RedisGeoPoint(point.getX(), point.getY())).collect(Collectors.toList()))
+                .orElseGet(ArrayList::new);
+    }
+
+    @Override
+    public List<RedisGeoPoint> geoPosition(String key, Collection<String> pointNames) {
+        return Optional.ofNullable(opsForGeo().position(key, pointNames.toArray(new String[0])))
                 .map(list -> list.stream().map(point -> new RedisGeoPoint(point.getX(), point.getY())).collect(Collectors.toList()))
                 .orElseGet(ArrayList::new);
     }
@@ -544,10 +563,20 @@ public class RedisOpsSpringImpl implements RedisOps {
                 .orElse(Boolean.FALSE);
     }
 
+    @Override
+    public Boolean geoRemove(String key, Collection<String> pointNames) {
+        return geoRemove(key, pointNames.toArray(new String[0]));
+    }
+
     //~ Common
     @Override
     public void del(String... keys) {
-        template.delete(Arrays.stream(keys).collect(Collectors.toList()));
+        del(Arrays.asList(keys));
+    }
+
+    @Override
+    public void del(Collection<String> keys) {
+        template.delete(keys);
     }
 
     @Override
@@ -564,9 +593,23 @@ public class RedisOpsSpringImpl implements RedisOps {
     }
 
     @Override
+    public long expire(long timeout, TimeUnit timeunit, Collection<String> keys) {
+        return keys.stream()
+                .map(key -> expire(key, timeout, timeunit))
+                .filter(Boolean::booleanValue)
+                .count();
+    }
+
+    @Override
     public boolean exists(String key) {
         return Optional.ofNullable(template.hasKey(key))
                 .orElse(Boolean.FALSE);
+    }
+
+    @Override
+    public long ttl(String key, TimeUnit timeunit) {
+        return Optional.ofNullable(template.getExpire(key, timeunit))
+                .orElse(-2L);
     }
 
     @Override
@@ -617,35 +660,6 @@ public class RedisOpsSpringImpl implements RedisOps {
 
     private GeoOperations<String, String> opsForGeo() {
         return template.opsForGeo();
-    }
-
-    private <T> Optional<T> toType(String value, Class<T> type) {
-        return Optional.ofNullable(value)
-                .map(RedisSerializeUtil.castType(type));
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T, C extends Collection<T>> C toType(Collection<String> values, Class<T> type) {
-        return (C) values.stream()
-                .map(RedisSerializeUtil.castType(type))
-                .collect(Collectors.toCollection(() -> {
-                    try {
-                        return values.getClass().newInstance();
-                    } catch (Throwable var3) {
-                        throw new IllegalStateException("Exception handler must throw a RuntimeException", var3);
-                    }
-                }));
-    }
-
-    private <T> String toString(T value) {
-        return RedisSerializeUtil.valueToString().apply(value);
-    }
-
-
-    private <T> String[] toStrings(T[] values) {
-        return Arrays.stream(values)
-                .map(this::toString)
-                .toArray(String[]::new);
     }
 
 }

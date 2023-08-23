@@ -22,6 +22,10 @@
         <module>grow-mq-kafka-boot-starter</module>
         <module>grow-mq-rabbit</module>
         <module>grow-mq-rabbit-boot-starter</module>
+        <module>grow-mq-rocket</module>
+        <module>grow-mq-rocket-boot-starter</module>
+        <module>grow-mq-active</module>
+        <module>grow-mq-active-boot-starter</module>
     </modules>
 
     <properties>

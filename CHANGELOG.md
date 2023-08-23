@@ -1,5 +1,15 @@
 # 🚀Changelog
 
+# 0.2.0 (2023-0X-XX)
+
+### 🐣新特性
+* 【mq    】      增加对RocketMQ支持
+* 【mq    】      增加对ActiveMQ支持
+* 【redis 】      重构序列化代码，提供可自定义序列化方式接口
+
+### 🐞Bug修复
+* 【delay 】      delay-quartz修复增加自定义JobFactory实现导致Quartz的SpringBoot配置自动装配失效问题
+
 # 0.1.2 (2023-05-17)
 
 ### 🐞Bug修复

@@ -7,5 +7,6 @@ package com.liguanqiao.grow.example.spring.boot.mq.constant;
 public interface GrowMqConstant {
 
     String TOPIC = "GROW-TOPIC";
+    String KEY = "GROW-KEY";
 
 }

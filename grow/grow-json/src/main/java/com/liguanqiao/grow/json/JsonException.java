@@ -1,17 +1,16 @@
 package com.liguanqiao.grow.json;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.core.util.StrUtil;
+import com.liguanqiao.grow.core.error.AbsGrowException;
 
 /**
  * Json异常
  *
  * @author liguanqiao
  **/
-public class JsonException extends RuntimeException {
+public class JsonException extends AbsGrowException {
 
     public JsonException(Throwable e) {
-        super(ExceptionUtil.getMessage(e), e);
+        super(e);
     }
 
     public JsonException(String message) {
@@ -19,7 +18,7 @@ public class JsonException extends RuntimeException {
     }
 
     public JsonException(String messageTemplate, Object... params) {
-        super(StrUtil.format(messageTemplate, params));
+        super(messageTemplate, params);
     }
 
     public JsonException(String message, Throwable throwable) {
@@ -31,6 +30,7 @@ public class JsonException extends RuntimeException {
     }
 
     public JsonException(Throwable throwable, String messageTemplate, Object... params) {
-        super(StrUtil.format(messageTemplate, params), throwable);
+        super(throwable, messageTemplate, params);
     }
+
 }

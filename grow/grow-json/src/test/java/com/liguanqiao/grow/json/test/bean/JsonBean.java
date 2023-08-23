@@ -25,6 +25,7 @@ public class JsonBean {
     private LocalDate localDate;
     private LocalTime localTime;
     private Date date;
+    private String empty;
 
     public static JsonBean create() {
         return new JsonBean()
@@ -35,7 +36,8 @@ public class JsonBean {
                 .setLocalDateTime(LocalDateTime.now())
                 .setLocalDate(LocalDate.now())
                 .setLocalTime(LocalTime.now())
-                .setDate(new Date());
+                .setDate(new Date())
+                .setEmpty(null);
     }
 
 }

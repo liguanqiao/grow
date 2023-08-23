@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.liguanqiao</groupId>
+        <artifactId>grow-mq</artifactId>
+        <version>0.1.2</version>
+    </parent>
+
+    <artifactId>grow-mq-active</artifactId>
+    <name>${project.artifactId}</name>
+    <description>Grow 常用MQ Client的Active封装</description>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-activemq.version>5.18.1</spring-activemq.version>
+        <jms-api.version>2.0.3</jms-api.version>
+    </properties>
+
+    <dependencies>
+        <!--grow-->
+        <dependency>
+            <groupId>com.liguanqiao</groupId>
+            <artifactId>grow-mq-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--spring-activemq-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.jms</groupId>
+            <artifactId>jakarta.jms-api</artifactId>
+            <version>${jms-api.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -15,23 +15,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RabbitListener(queuesToDeclare = @Queue(GrowMqConstant.TOPIC))
-public class GrowMqListener {
+public class GrowRabbitMqListener {
 
-    /**
-     * 处理设备报警
-     */
     @RabbitHandler
-    public void handle(GrowMqValueDTO dto) {
+    public void onMessage(GrowMqValueDTO dto) {
         log.info("grow mq listener, data: [{}]", dto);
     }
-
-    /**
-     * 处理设备报警
-     */
-//    @RabbitListener(queuesToDeclare = @Queue(GrowMqConstant.TOPIC))
-//    @RabbitHandler
-//    public void handle(String dto) {
-//        log.info("grow mq listener, data: [{}]", dto);
-//    }
 
 }

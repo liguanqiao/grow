@@ -21,8 +21,8 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 public class MqWrap {
-    public TracerSpan tracerSpan;
-    public String content;
+    private TracerSpan tracerSpan;
+    private String content;
 
     public static MqWrap convert(TracerContext tracerContext, Object data) {
         return new MqWrap()

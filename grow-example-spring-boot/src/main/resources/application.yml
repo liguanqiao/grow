@@ -42,6 +42,21 @@ spring:
 
 logging:
   config: classpath:log/logback-spring.xml
+  level:
+    org.zalando.logbook: trace
 
-tlog:
-  enable-invoke-time-print: true
+logbook:
+  filter:
+    form-request-mode: parameter
+  format:
+    style: http
+  write:
+    max-body-size: 10000
+  exclude:
+    # 排除swagger
+    - /v3/api-docs
+    - /swagger-resources/**
+    - /swagger-ui/**
+  obfuscate:
+    headers:
+      - no-obfuscate

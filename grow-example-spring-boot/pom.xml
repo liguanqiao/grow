@@ -21,6 +21,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <grow.version>0.1.2</grow.version>
         <lombok.version>1.18.24</lombok.version>
+        <logbook.version>2.14.0</logbook.version>
+        <json-smart.version>2.3</json-smart.version>
     </properties>
 
     <dependencies>
@@ -81,7 +83,10 @@
         </dependency>
         <dependency>
             <groupId>com.liguanqiao</groupId>
+<!--            <artifactId>grow-mq-kafka-boot-starter</artifactId>-->
             <artifactId>grow-mq-rabbit-boot-starter</artifactId>
+<!--            <artifactId>grow-mq-rocket-boot-starter</artifactId>-->
+<!--            <artifactId>grow-mq-active-boot-starter</artifactId>-->
             <version>${grow.version}</version>
         </dependency>
         <dependency>
@@ -100,6 +105,17 @@
             <artifactId>grow-delay-quartz-boot-starter</artifactId>
 <!--            <artifactId>grow-delay-redisson-boot-starter</artifactId>-->
             <version>${grow.version}</version>
+        </dependency>
+        <!--Logbook-->
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-spring-boot-starter</artifactId>
+            <version>${logbook.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>${json-smart.version}</version>
         </dependency>
     </dependencies>
 

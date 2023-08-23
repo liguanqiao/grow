@@ -6,7 +6,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.yomahub.tlog.springboot.TLogFeignAutoConfiguration,\
   com.yomahub.tlog.springboot.TLogGatewayAutoConfiguration,\
   com.yomahub.tlog.springboot.TLogXxljobAutoConfiguration,\
-  com.yomahub.tlog.springboot.TLogWebAutoConfiguration,\
+  com.liguanqiao.grow.log.spring.boot.autoconfigure.LogWebAutoConfiguration,\
   com.liguanqiao.grow.log.spring.boot.autoconfigure.LogAutoConfiguration
 
 # Environment Post Processor
