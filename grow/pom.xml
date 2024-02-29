@@ -8,7 +8,7 @@
 
     <groupId>com.liguanqiao</groupId>
     <artifactId>grow</artifactId>
-    <version>0.1.2</version>
+    <version>0.2.0</version>
     <name>grow</name>
     <description>Grow是一个可提高JavaWeb开发效率的模块库。</description>
     <url>https://github.com/liguanqiao/grow</url>
@@ -34,7 +34,7 @@
         <compile.version>8</compile.version>
         <junit.version>4.13.2</junit.version>
         <lombok.version>1.18.24</lombok.version>
-        <hutool.version>5.8.11</hutool.version>
+        <hutool.version>5.8.26</hutool.version>
         <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
         <spring.version>5.2.6.RELEASE</spring.version>
         <spring-cloud.version>2.3.0.RELEASE</spring-cloud.version>

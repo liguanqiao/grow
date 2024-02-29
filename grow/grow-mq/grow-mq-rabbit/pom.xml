@@ -9,7 +9,7 @@
     <parent>
         <artifactId>grow-mq</artifactId>
         <groupId>com.liguanqiao</groupId>
-        <version>0.1.2</version>
+        <version>0.2.0</version>
     </parent>
 
     <artifactId>grow-mq-rabbit</artifactId>

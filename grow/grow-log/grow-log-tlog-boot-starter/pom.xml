@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.liguanqiao</groupId>
         <artifactId>grow-log</artifactId>
-        <version>0.1.2</version>
+        <version>0.2.0</version>
     </parent>
 
     <artifactId>grow-log-tlog-boot-starter</artifactId>

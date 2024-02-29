@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <!--带颜色的控制台日志-->
+    <appender name="STDOUT_COLOR" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--不带颜色的控制台日志-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--异步打印不带颜色的控制台日志-->
+    <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <!--不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志-->
+        <discardingThreshold>0</discardingThreshold>
+        <!--设置队列入队时非阻塞，当队列满时会直接丢弃日志，但是对性能提升极大-->
+        <neverBlock>true</neverBlock>
+        <!--更改默认的队列的深度,该值会影响性能.默认值为256-->
+        <queueSize>2048</queueSize>
+        <!--添加附加的appender,最多只能添加一个-->
+        <appender-ref ref="STDOUT"/>
+    </appender>
+</included>

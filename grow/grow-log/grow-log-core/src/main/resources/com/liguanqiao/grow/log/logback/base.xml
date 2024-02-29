@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <include resource="com/liguanqiao/grow/log/logback/defaults.xml" />
+    <include resource="com/liguanqiao/grow/log/logback/console-appender.xml" />
+    <include resource="com/liguanqiao/grow/log/logback/file-appender.xml" />
+    <root level="INFO">
+        <appender-ref ref="STDOUT_COLOR" />
+        <appender-ref ref="ASYNC_FILE" />
+    </root>
+</included>

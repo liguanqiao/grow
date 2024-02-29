@@ -1,11 +1,14 @@
 # 🚀Changelog
 
-# 0.2.0 (2023-0X-XX)
+# 0.2.0 (2024-02-29)
 
 ### 🐣新特性
 * 【mq    】      增加对RocketMQ支持
 * 【mq    】      增加对ActiveMQ支持
 * 【redis 】      重构序列化代码，提供可自定义序列化方式接口
+* 【log   】      tlog的traceId默认生成方式从HandlerInterceptor改为为Filter
+* 【log   】      优化日志defaults.xml模板，将他拆成defaults.xml、console-appender.xml、file-appender.xml、base.xml，使用者可按需引入。
+* 【core  】      升级hutool至5.8.26
 
 ### 🐞Bug修复
 * 【delay 】      delay-quartz修复增加自定义JobFactory实现导致Quartz的SpringBoot配置自动装配失效问题

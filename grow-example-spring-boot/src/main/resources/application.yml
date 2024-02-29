@@ -44,6 +44,10 @@ logging:
   config: classpath:log/logback-spring.xml
   level:
     org.zalando.logbook: trace
+  file:
+    #name的优先级比path高
+    name: ./logs/total.log
+    path: ./logs
 
 logbook:
   filter:
