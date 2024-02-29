@@ -3,9 +3,7 @@ package com.liguanqiao.grow.example.spring.boot.mq.listeners;
 import com.liguanqiao.grow.example.spring.boot.mq.constant.GrowMqConstant;
 import com.liguanqiao.grow.example.spring.boot.mq.model.dto.GrowMqValueDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +12,11 @@ import org.springframework.stereotype.Component;
  **/
 @Slf4j
 @Component
-@RabbitListener(queuesToDeclare = @Queue(GrowMqConstant.TOPIC))
+@RabbitListener(bindings = @QueueBinding(
+        value = @Queue(GrowMqConstant.TOPIC),
+        exchange = @Exchange(GrowMqConstant.TOPIC),
+        key = GrowMqConstant.KEY
+))
 public class GrowRabbitMqListener {
 
     @RabbitHandler
