@@ -1,0 +1,72 @@
+server:
+  port: 8999
+spring:
+  application:
+    name: grow-example-springboot2.3
+  profiles:
+    active: local
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
+  datasource:
+    hikari:
+      maximum-pool-size: 5
+      idle-timeout: 300000
+      max-lifetime: 600000
+      minimum-idle: 2
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: clusteredScheduler
+            instanceId: AUTO
+          startup-delay: 90s
+          jobStore:
+            #持久化配置
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            #我们仅为数据库制作了特定于数据库的代理
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            #数据库表前缀
+            tablePrefix: QRTZ_
+            useProperties: false
+            # 集群检查周期，单位为毫秒，可以自定义缩短时间。当某一个节点宕机的时候，其他节点等待多久后开始执行任务
+            clusterCheckinInterval: 5000
+            #打开群集功能
+            isClustered: true
+
+logging:
+  config: classpath:log/logback-spring.xml
+  level:
+    org.zalando.logbook: trace
+  file:
+    #name的优先级比path高
+    name: logs/total.log
+    path: logs
+    max-size: 10KB
+    total-size-cap: 100MB
+    max-history: 3
+    clean-history-on-start: false
+  pattern:
+    rolling-file-name: logs/total/total.log.%d{yyyy-MM-dd}.%i.log.gz
+
+logbook:
+  filter:
+    form-request-mode: parameter
+  format:
+    style: http
+  write:
+    max-body-size: 10000
+  exclude:
+    # 排除swagger
+    - /v3/api-docs
+    - /swagger-resources/**
+    - /swagger-ui/**
+  obfuscate:
+    headers:
+      - no-obfuscate

@@ -1,8 +1,0 @@
-server:
-  port: 8999
-
-spring:
-  main:
-    banner-mode: "off"
-  application:
-    name: grow-example-spring-boot

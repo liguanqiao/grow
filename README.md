@@ -34,15 +34,15 @@ Grow是一个可提高JavaWeb开发效率的模块库。
 
 | 模块                       | 介绍                                                     | 使用文档                            |
 |--------------------------|--------------------------------------------------------|---------------------------------|
-| grow-core                | 核心，包括Bean操作、日期、各种Util等                                 | [文档](grow/grow-core/README.md)  |
-| grow-delay               | 分布式延迟任务封装，支持quartz、rabbitmq、redisson                   | [文档](grow/grow-delay/README.md) |
-| grow-json                | JSON库(jackson、gson、fastjson等)封装，采用SPI服务发现机制            | [文档](grow/grow-json/README.md)  |
-| grow-lock                | 分布式锁库封装，支持redission、spring-integration-redis、zookeeper | [文档](grow/grow-lock/README.md)  |
-| grow-log                 | 分布式链路Log库封装，支持spring-cloud-sleuth、tlog                 | [文档](grow/grow-log/README.md)   |
-| grow-mq                  | MqClient封装，支持kafka、rabbitmq、rocketmq、activemq          | [文档](grow/grow-mq/README.md)    |
-| grow-redis               | RedisClient封装，支持redisTemplate、redisson                 | [文档](grow/grow-redis/README.md) |
-| grow-orm                 | ORM脚手架，支持mybatis-plus                                  | [文档](grow/grow-orm/README.md)   |
-| grow-web                 | Web脚手架，支持spring-boot、spring-cloud                      | [文档](grow/grow-web/README.md)   |
+| grow-core                | 核心，包括Bean操作、日期、各种Util等                                 | [文档](grow-parent/grow-core/README.md)  |
+| grow-delay               | 分布式延迟任务封装，支持quartz、rabbitmq、redisson                   | [文档](grow-parent/grow-delay/README.md) |
+| grow-json                | JSON库(jackson、gson、fastjson等)封装，采用SPI服务发现机制            | [文档](grow-parent/grow-json/README.md)  |
+| grow-lock                | 分布式锁库封装，支持redission、spring-integration-redis、zookeeper | [文档](grow-parent/grow-lock/README.md)  |
+| grow-log                 | 分布式链路Log库封装，支持spring-cloud-sleuth、tlog                 | [文档](grow-parent/grow-log/README.md)   |
+| grow-mq                  | MqClient封装，支持kafka、rabbitmq、rocketmq、activemq          | [文档](grow-parent/grow-mq/README.md)    |
+| grow-redis               | RedisClient封装，支持redisTemplate、redisson                 | [文档](grow-parent/grow-redis/README.md) |
+| grow-orm                 | ORM脚手架，支持mybatis-plus                                  | [文档](grow-parent/grow-orm/README.md)   |
+| grow-web                 | Web脚手架，支持spring-boot、spring-cloud                      | [文档](grow-parent/grow-web/README.md)   |
 | grow-example-spring-boot | Spring Boot Web 使用范例                                   | 无                               |
 
 -------------------------------------------------------------------------------

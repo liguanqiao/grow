@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 控制台打印设置 -->
+<!--    <include resource="com/liguanqiao/grow/log/logback/defaults.xml"/>-->
+    <include resource="com/liguanqiao/grow/log/logback/base.xml"/>
+
+<!--    <root level="INFO">-->
+<!--        <appender-ref ref="STDOUT_COLOR"/>-->
+<!--        <appender-ref ref="ASYNC_STDOUT"/>-->
+<!--        <appender-ref ref="ASYNC_FILE"/>-->
+<!--    </root>-->
+
+</configuration>
