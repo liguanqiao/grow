@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-	<a target="_blank" href="https://search.maven.org/artifact/com.liguanqiao/grow">
-		<img src="https://img.shields.io/maven-central/v/com.liguanqiao/grow.svg?label=Maven%20Central" />
+	<a target="_blank" href="https://search.maven.org/artifact/com.liguanqiao/grow-parent">
+		<img src="https://img.shields.io/maven-central/v/com.liguanqiao/grow-parent.svg?label=Maven%20Central" />
 	</a>
 	<a target="_blank" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html">
 		<img src="https://img.shields.io/badge/JDK-8+-green.svg" />
